@@ -1,0 +1,5 @@
+URL                                               	CHART VERSION	APP VERSION	DESCRIPTION                                       	REPO URL                                   
+https://artifacthub.io/packages/helm/rock8s/kserve	1.0.1        	v0.8.0     	Helm chart for KServe Serverless Inferencing on...	https://charts.rock8s.com                  
+https://artifacthub.io/packages/helm/wikimedia/...	0.2.9        	0.11.2     	WMF KServe setup                                  	https://helm-charts.wikimedia.org/stable/  
+https://artifacthub.io/packages/helm/wikimedia/...	0.4.16       	0.0.1      	WMF KServe Inference services                     	https://helm-charts.wikimedia.org/stable/  
+https://artifacthub.io/packages/helm/truefoundr...	0.1.1        	           	Kserve components                                 	https://truefoundry.github.io/infra-charts/
