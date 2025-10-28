@@ -20,7 +20,7 @@ resource "helm_release" "mlflow" {
 
         # Allow the Host header(s) you access MLflow with
         # Example: set to "mlflow.example.com,10.0.0.*,localhost:*"
-        MLFLOW_SERVER_ALLOWED_HOSTS = "48.217.201.222" # change to your host(s) or use "*"
+        MLFLOW_SERVER_ALLOWED_HOSTS = "*" # change to your host(s) or use "*"
       }
     })
   ]
