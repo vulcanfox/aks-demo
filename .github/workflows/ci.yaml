@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     # Specifying the runner
     runs-on: ubuntu-latest
 
@@ -62,7 +63,7 @@ jobs:
           name: tfplan
           path: tfplan.binary
           retention-days: 1
-      - name: Comment Terraform plan (Python)
+      - name: Comment Terraform plan (Python fetcher)
         run: python3 .github/scripts/plan-pr-comment-fetch.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -17,14 +17,23 @@ body = f"#### Terraform Plan Summary 📊\n**Plan:** {to_add} to add, {to_change
 
 body += "<details><summary>Resources</summary>\n"
 for r in resource_changes:
-    body += f"- **{r['address']}** ({', '.join(r['change']['actions'])})\n"
-body += "</details>\n"
+    body += f"""
+    - **{r['address']}** ({', '.join(r['change']['actions'])})\n
+
+    """
+body += "\n"
+
 
 # Post to GitHub PR
 pr_number = os.environ["PR_NUMBER"]
 repo_owner = os.environ["REPO_OWNER"]
 repo_name = os.environ["REPO_NAME"]
 token = os.environ["GITHUB_TOKEN"]
+actor = os.environ.get("GITHUB_ACTOR") 
+event_name = os.environ.get("GITHUB_EVENT_NAME")
 
+author_sign = f"Pushed by:** @{actor}, Action: {event_name}"
+
+body+= author_sign
 url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/issues/{pr_number}/comments"
 requests.post(url, headers={"Authorization": f"token {token}"}, json={"body": body})
