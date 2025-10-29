@@ -115,6 +115,9 @@ jobs:
       - name: Terraform Apply
         run: terraform apply tfplan.binary
       # Step 7: Get the server IP that is now running on AKS
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }} --name ${{ secrets.AKS_NAME }} --overwrite-existing
       - name: Get MLflow external IP
         run: python3 .github/scripts/get_server_ip.py
         env:
