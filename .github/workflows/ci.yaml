@@ -6,8 +6,16 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
 jobs:
   terraform_workflow_job:
+    # Add permissions to connect to az
+    permissions:
+      contents: read
+      id-token: write
+    # Specifying the runner
     runs-on: ubuntu-latest
 
     steps:
