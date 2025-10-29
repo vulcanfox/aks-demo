@@ -114,3 +114,12 @@ jobs:
       # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply tfplan.binary
+      # Step 7: Get the server IP that is now running on AKS
+      - name: Get MLflow external IP
+        run: python3 .github/scripts/get_server_ip.py
+        env:
+          MLFLOW_NAMESPACE: mlflow
+          MLFLOW_SERVICE_NAME: mlflow
+      - name: Show MLflow server address
+        run: |
+          echo "MLflow deployment finished. cc @vulcanfox — http://$MLFLOW_EXTERNAL_IP" >> $GITHUB_STEP_SUMMARY
