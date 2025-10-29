@@ -111,6 +111,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-      # Step 6: Apply the plan
+      # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply tfplan.binary
