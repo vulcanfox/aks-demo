@@ -6,7 +6,7 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
-  terraform-job:
+  terraform-plan:
     # Add permissions to connect to az
     permissions:
       contents: read
@@ -47,3 +47,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Terraform successfully initialised ✅"
+
+      # Step 5: Trigger Terraform Plan
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -out=tfplan.binary
+          terraform show -json tfplan.binary > tfplan.json
+
+      # Upload the plan for the later apply job
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: tfplan.binary
+          retention-days: 1
+      - name: Comment Terraform plan (Python)
+        run: python3 .github/scripts/plan-pr-comment-fetch.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
