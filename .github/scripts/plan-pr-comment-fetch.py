@@ -17,7 +17,10 @@ body = f"#### Terraform Plan Summary 📊\n**Plan:** {to_add} to add, {to_change
 
 body += "<details><summary>Resources</summary>\n"
 for r in resource_changes:
-    body += f"- **{r['address']}** ({', '.join(r['change']['actions'])})\n"
+    body += f"""
+    - **{r['address']}** ({', '.join(r['change']['actions'])})\n
+
+    """
 body += "</details>\n"
 
 # Post to GitHub PR
