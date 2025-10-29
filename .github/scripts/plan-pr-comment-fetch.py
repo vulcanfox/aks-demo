@@ -15,12 +15,12 @@ to_destroy = sum(1 for r in resource_changes if "delete" in r["change"]["actions
 # Build markdown summary
 body = f"#### Terraform Plan Summary 📊\n**Plan:** {to_add} to add, {to_change} to change, {to_destroy} to destroy\n\n"
 
-body += "<details><summary>Resources</summary>\n"
+body += "<details><summary>Resources</summary>"
 lines = [
     f"- **{r['address']}** ({', '.join(r['change']['actions'])})"
     for r in resource_changes
 ]
-body = "\n </details>".join(lines)
+body.join(lines)+"</details>"
 
 
 # Post to GitHub PR
