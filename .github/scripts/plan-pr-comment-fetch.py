@@ -16,10 +16,12 @@ to_destroy = sum(1 for r in resource_changes if "delete" in r["change"]["actions
 body = f"#### Terraform Plan Summary 📊\n**Plan:** {to_add} to add, {to_change} to change, {to_destroy} to destroy\n\n"
 
 body += "<details><summary>Resources</summary>\n"
-for r in resource_changes:
-    body += f"""\
-- **{r['address']}** ({', '.join(r['change']['actions'])})
-"""
+lines = [
+    f"- **{r['address']}** ({', '.join(r['change']['actions'])})"
+    for r in resource_changes
+]
+body = "\n".join(lines)
+
 
 # Post to GitHub PR
 pr_number = os.environ["PR_NUMBER"]
