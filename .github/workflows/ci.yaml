@@ -73,7 +73,7 @@ jobs:
 
   # Apply job
   Terraform-apply:
-    needs: plan
+    needs: Terraform-plan
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production # Requires approval
