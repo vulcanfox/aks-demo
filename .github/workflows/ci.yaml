@@ -77,7 +77,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production # Requires approval
-
+    # Add permissions to connect to az
+    permissions:
+      contents: read
+      id-token: write
     steps:
       # Step 1: Checkout repository
       - name: Checkout code
