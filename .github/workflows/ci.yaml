@@ -40,13 +40,13 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       # Comment for PR to give feedback to user
-      - name: PR comment for Terraform init results
-        if: github.event_name== 'pull_request'
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: "Terraform successfully initialised ✅"
+      # - name: PR comment for Terraform init results
+      #   if: github.event_name== 'pull_request'
+      #   uses: peter-evans/create-or-update-comment@v4
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     issue-number: ${{ github.event.pull_request.number }}
+      #     body: "Terraform successfully initialised ✅"
 
       # Step 5: Trigger Terraform Plan
       - name: Terraform Plan
