@@ -20,7 +20,7 @@ lines = [
     f"- **{r['address']}** ({', '.join(r['change']['actions'])})"
     for r in resource_changes
 ]
-body = "\n".join(lines)
+body = "\n </details>".join(lines)
 
 
 # Post to GitHub PR
