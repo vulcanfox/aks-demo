@@ -5,10 +5,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  id-token: write
 jobs:
   terraform-job:
     # Add permissions to connect to az
@@ -34,3 +30,12 @@ jobs:
       # Step 3: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+
+      # Step 4: Terraform init to build providers/modules
+      - name: Terraform Init
+        run: terraform init
+        env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
