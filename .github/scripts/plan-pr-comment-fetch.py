@@ -21,8 +21,6 @@ for r in resource_changes:
     - **{r['address']}** ({', '.join(r['change']['actions'])})\n
 
     """
-body += "</details>\n"
-
 # Post to GitHub PR
 pr_number = os.environ["PR_NUMBER"]
 repo_owner = os.environ["REPO_OWNER"]
