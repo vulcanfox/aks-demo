@@ -144,15 +144,9 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      # Step 5: Download the saved plan from the plan job previously
-      - name: Download Plan Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ github.workspace }}/${{ inputs.working-directory }}
       # Step 6: Apply the plan.
       - name: Terraform Apply
-        run: terraform apply tfplan.binary
+        run: terraform apply
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
