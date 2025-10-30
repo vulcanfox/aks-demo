@@ -31,7 +31,7 @@ jobs:
     # Set defaults for all steps
     defaults:
       run:
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
     # Specifying the runner
     runs-on: ubuntu-latest
 
