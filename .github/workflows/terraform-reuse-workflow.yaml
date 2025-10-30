@@ -21,6 +21,10 @@ on:
         required: true
       AZURE_CLIENT_SECRET:
         required: true
+      AZURE_RG:
+        required: true
+      AKS_NAME:
+        required: true
 jobs:
   Terraform-plan:
     # Set the environment
