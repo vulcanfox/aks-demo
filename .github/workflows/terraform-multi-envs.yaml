@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - production
+      - staging
     paths:
       - "environments/**"
       - "modules/**"
@@ -22,6 +23,8 @@ jobs:
         environment:
           - name: production
             directory: environments/production
+          - name: staging
+            directory: environments/staging
       max-parallel: 1
     uses: ./.github/workflows/terraform-reuse-workflow.yaml
     with:
