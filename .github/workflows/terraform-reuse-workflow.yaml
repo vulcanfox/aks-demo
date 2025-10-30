@@ -102,13 +102,19 @@ jobs:
   # Apply job
   Terraform-apply:
     needs: Terraform-plan
-    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/${{ inputs.environment }}' && github.event_name == 'push'
-    environment: production # Requires approval
+    # Set the environment
+    environment: ${{ inputs.environment }}
     # Add permissions to connect to az
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
+    # Set defaults for all steps
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+    runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout repository
       - name: Checkout code
