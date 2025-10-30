@@ -20,7 +20,7 @@ variable "namespace" {
   default     = "adnan-demo-namespace"
 }
 variable "environment" {
-  description = "Name to use for the staging environment."
+  description = "Name to use for the staging environment. "
   type        = string
   default     = "staging"
 }
