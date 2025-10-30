@@ -41,14 +41,15 @@ provider "helm" {
 }
 
 module "cluster" {
-  source       = "./modules/cluster"
+  source       = "../../modules/cluster"
   appId        = var.appId    # Pass root var to module
   password     = var.password # Pass root var to module
   generic_name = var.generic_name
+  environment  = var.environment
 }
 
 module "mlflow" {
-  source     = "./modules/mlflow"
+  source     = "../../modules/mlflow"
   namespace  = var.namespace
   depends_on = [module.cluster]
 }

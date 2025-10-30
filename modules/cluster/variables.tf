@@ -14,3 +14,7 @@ variable "password" {
 }
 
 
+variable "environment" {
+  type = string
+}
+
