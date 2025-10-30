@@ -77,7 +77,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -input=false -var="appId=${{secrets.AZURE_CLIENT_ID}}" -var="passwword=${{secrets.AZURE_CLIENT_SECRET}}" -out=tfplan.binary
+          terraform plan -input=false -var="appId=${{secrets.AZURE_CLIENT_ID}}" -var="password=${{secrets.AZURE_CLIENT_SECRET}}" -out=tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
 
       # Upload the plan for the later apply job
