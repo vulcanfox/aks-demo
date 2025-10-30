@@ -3,7 +3,7 @@ name: Terraform multi-environment workflow
 on:
   push:
     branches:
-      - main
+      - production
     paths:
       - "environments/**"
       - "modules/**"
