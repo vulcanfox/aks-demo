@@ -64,7 +64,7 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      # Comment for PR to give feedback to user
+      # Comment for PR to give feedback to usera
       - name: PR comment for Terraform init results
         if: github.event_name== 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
