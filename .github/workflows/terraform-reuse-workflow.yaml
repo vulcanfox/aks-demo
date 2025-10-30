@@ -81,14 +81,7 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
         env:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
-          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
-      - name: Check TF_VAR_password
-        run: |
-          if [ -z "$TF_VAR_password" ]; then
-            echo "TF_VAR_password is empty!"
-          else
-            echo "TF_VAR_password is set."
-          fi
+          TF_VAR_password: "Z7z8Q~1Z5dwiGKEo_PPhxkIE4DwUpjZxO56jlaUE"
 
       # Upload the plan for the later apply job
       - name: Upload Plan Artifact
