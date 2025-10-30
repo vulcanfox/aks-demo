@@ -103,7 +103,7 @@ jobs:
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
 
-  # Apply job
+  # Apply job starts here
   Terraform-apply:
     needs: Terraform-plan
     if: github.ref == format('refs/heads/{0}', inputs.environment) && github.event_name == 'push'
