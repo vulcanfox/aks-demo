@@ -83,7 +83,7 @@ jobs:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_CLIENT_SECRET: "Z7z8Q~1Z5dwiGKEo_PPhxkIE4DwUpjZxO56jlaUE"
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
