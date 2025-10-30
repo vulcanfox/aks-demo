@@ -19,6 +19,8 @@ on:
         required: true
       AZURE_SUBSCRIPTION_ID:
         required: true
+      AZURE_CLIENT_SECRET:
+        required: true
 jobs:
   Terraform-plan:
     # Set the environment
@@ -72,14 +74,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Terraform successfully initialised ✅"
-
-      - name: Verify Secret Exists
-        run: |
-          if [ -n "${{ secrets.AZURE_CLIENT_SECRET }}" ]; then
-            echo "✅ Secret is set (length: $(echo -n '${{ secrets.AZURE_CLIENT_SECRET }}' | wc -c) characters)"
-          else
-            echo "❌ Secret is empty or missing"
-          fi
       # Step 5: Trigger Terraform Plan
       - name: Terraform Plan
         id: plan
