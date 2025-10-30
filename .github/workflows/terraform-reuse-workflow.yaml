@@ -27,6 +27,8 @@ on:
         required: true
 jobs:
   Terraform-plan:
+    # Only run on PR request
+    if: github.event_name == 'pull_request'
     # Set the environment
     environment: ${{ inputs.environment }}
     # Add permissions to connect to az
