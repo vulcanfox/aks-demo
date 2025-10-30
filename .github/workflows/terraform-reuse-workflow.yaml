@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan.binary
+          path: ${{ github.workspace }}/${{ inputs.working-directory }}/tfplan.binary
           retention-days: 1
       - name: Comment Terraform plan (Python fetcher)
         run: python3 -v ${{ github.workspace }}/.github/scripts/plan-pr-comment-fetch.py
