@@ -21,7 +21,7 @@ jobs:
       matrix:
         environment:
           - name: production
-            directory: ./environments/production
+            directory: environments/production
 
     uses: ./.github/workflows/terraform-reuse-workflow.yaml
     with:

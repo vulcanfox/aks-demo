@@ -42,7 +42,7 @@ jobs:
       - name: Debug list files
         run: |
           pwd
-          ls -l ./environments/production
+          ls -l ${{ github.workspace }}/${{ inputs.working-directory }}
 
       # Step 2: Log in with your Azure credentials
       - name: Azure login
