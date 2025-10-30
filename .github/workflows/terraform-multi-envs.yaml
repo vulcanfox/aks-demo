@@ -9,6 +9,9 @@ on:
       - "environments/**"
       - "modules/**"
   pull_request:
+    branches:
+      - production
+      - staging
     paths:
       - "environments/**"
       - "modules/**"
