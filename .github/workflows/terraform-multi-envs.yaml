@@ -22,7 +22,7 @@ jobs:
         environment:
           - name: production
             directory: environments/production
-
+      max-parallel: 1
     uses: ./.github/workflows/terraform-reuse-workflow.yaml
     with:
       environment: ${{ matrix.environment.name }}
