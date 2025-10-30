@@ -77,8 +77,15 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -input=false -var="appId=${{secrets.AZURE_CLIENT_ID}}" -var="password=${{secrets.AZURE_CLIENT_SECRET}}" -out=tfplan.binary
+          terraform plan -input=false -out=tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
+        env:
+          TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       # Upload the plan for the later apply job
       - name: Upload Plan Artifact
