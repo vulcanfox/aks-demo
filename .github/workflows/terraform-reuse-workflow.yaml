@@ -73,6 +73,13 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: "Terraform successfully initialised ✅"
 
+      - name: Verify Secret Exists
+        run: |
+          if [ -n "${{ secrets.AZURE_CLIENT_SECRET }}" ]; then
+            echo "✅ Secret is set (length: $(echo -n '${{ secrets.AZURE_CLIENT_SECRET }}' | wc -c) characters)"
+          else
+            echo "❌ Secret is empty or missing"
+          fi
       # Step 5: Trigger Terraform Plan
       - name: Terraform Plan
         id: plan
@@ -81,7 +88,7 @@ jobs:
           terraform show -json tfplan.binary > tfplan.json
         env:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
-          TF_VAR_password: "Z7z8Q~1Z5dwiGKEo_PPhxkIE4DwUpjZxO56jlaUE"
+          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       # Upload the plan for the later apply job
       - name: Upload Plan Artifact
