@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "terraform-state-rg"
     storage_account_name = "tfstatestrgadnan"
     container_name       = "tfstate"
-    key                  = "prod/terraform.tfstate"
+    key                  = "prod/terraform.tfstate" # creating prod state file
   }
 }
