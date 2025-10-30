@@ -17,10 +17,6 @@ jobs:
     strategy:
       matrix:
         environment:
-          - name: dev
-            directory: environments/dev
-          - name: staging
-            directory: environments/staging
           - name: production
             directory: environments/production
 
