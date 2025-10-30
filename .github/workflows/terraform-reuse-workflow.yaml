@@ -58,7 +58,7 @@ jobs:
 
       # Step 4: Terraform init to build providers/modules
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -reconfigure
         env:
           ARM_USE_OIDC: true
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
