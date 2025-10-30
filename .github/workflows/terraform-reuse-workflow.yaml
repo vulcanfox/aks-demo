@@ -103,7 +103,7 @@ jobs:
   Terraform-apply:
     needs: Terraform-plan
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/${{ inputs.environment }}' && github.event_name == 'push'
     environment: production # Requires approval
     # Add permissions to connect to az
     permissions:
