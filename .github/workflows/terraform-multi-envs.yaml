@@ -1,0 +1,37 @@
+name: Terraform multi-environment workflow
+
+on:
+  push:
+    branches:
+      - production
+    paths:
+      - "environments/**"
+      - "modules/**"
+  pull_request:
+    paths:
+      - "environments/**"
+      - "modules/**"
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+jobs:
+  matrix-terraform:
+    strategy:
+      matrix:
+        environment:
+          - name: production
+            directory: environments/production
+      max-parallel: 1
+    uses: ./.github/workflows/terraform-reuse-workflow.yaml
+    with:
+      environment: ${{ matrix.environment.name }}
+      working-directory: ${{ matrix.environment.directory }}
+      terraform-version: 1.7.0
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_RG: ${{secrets.AZURE_RG}}
+      AKS_NAME: ${{secrets.AKS_NAME}}

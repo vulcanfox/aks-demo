@@ -19,3 +19,9 @@ variable "namespace" {
   type        = string
   default     = "adnan-demo-namespace"
 }
+
+variable "environment" {
+  description = "Name to use for the environment."
+  type        = string
+  default     = "dev"
+}

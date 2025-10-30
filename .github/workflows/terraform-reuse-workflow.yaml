@@ -1,17 +1,43 @@
 name: Terraform CI/CD
 on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      working-directory:
+        required: true
+        type: string
+      terraform-version:
+        required: false
+        type: string
+        default: "1.7.0"
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_CLIENT_SECRET:
+        required: true
+      AZURE_RG:
+        required: true
+      AKS_NAME:
+        required: true
 jobs:
   Terraform-plan:
+    # Set the environment
+    environment: ${{ inputs.environment }}
     # Add permissions to connect to az
     permissions:
       contents: read
       id-token: write
       pull-requests: write
+    # Set defaults for all steps
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
     # Specifying the runner
     runs-on: ubuntu-latest
 
@@ -19,6 +45,10 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Debug list files
+        run: |
+          pwd
+          ls -l ${{ github.workspace }}/${{ inputs.working-directory }}
 
       # Step 2: Log in with your Azure credentials
       - name: Azure login
@@ -34,13 +64,13 @@ jobs:
 
       # Step 4: Terraform init to build providers/modules
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -reconfigure # new state
         env:
           ARM_USE_OIDC: true
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      # Comment for PR to give feedback to user
+      # Comment for PR to give feedback to usera
       - name: PR comment for Terraform init results
         if: github.event_name== 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
@@ -48,23 +78,25 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Terraform successfully initialised ✅"
-
       # Step 5: Trigger Terraform Plan
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -out=tfplan.binary
+          terraform plan -input=false -out=tfplan.binary
           terraform show -json tfplan.binary > tfplan.json
+        env:
+          TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       # Upload the plan for the later apply job
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan.binary
+          path: ${{ github.workspace }}/${{ inputs.working-directory }}/tfplan.binary
           retention-days: 1
       - name: Comment Terraform plan (Python fetcher)
-        run: python3 .github/scripts/plan-pr-comment-fetch.py
+        run: python3 -v ${{ github.workspace }}/.github/scripts/plan-pr-comment-fetch.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -74,13 +106,19 @@ jobs:
   # Apply job
   Terraform-apply:
     needs: Terraform-plan
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production # Requires approval
+    if: github.ref == format('refs/heads/{0}', inputs.environment) && github.event_name == 'push'
+    # Set the environment
+    environment: ${{ inputs.environment }}
     # Add permissions to connect to az
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
+    # Set defaults for all steps
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+    runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout repository
       - name: Checkout code
@@ -97,7 +135,6 @@ jobs:
       # Step 3: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
       # Step 4: Terraform init to build providers/modules
       - name: Terraform Init
         run: terraform init
@@ -111,6 +148,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
+          path: ${{ github.workspace }}/${{ inputs.working-directory }}
       # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply tfplan.binary
