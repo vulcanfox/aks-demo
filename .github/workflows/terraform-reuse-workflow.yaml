@@ -39,6 +39,10 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Debug list files
+        run: |
+          pwd
+          ls -l ./environments/production
 
       # Step 2: Log in with your Azure credentials
       - name: Azure login
