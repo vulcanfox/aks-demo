@@ -20,7 +20,7 @@ variable "namespace" {
   default     = "adnan-demo-namespace"
 }
 variable "environment" {
-  description = "Name to use for the environment."
+  description = "Name to use for the environment.."
   type        = string
   default     = "prod"
 }
