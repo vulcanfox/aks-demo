@@ -183,6 +183,11 @@ jobs:
         env:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: Show created resource group
+        run: |
+          echo ${{ secrets.AZURE_RG }} 
+          az group show --name ${{ secrets.AZURE_RG }} --output table
+
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
