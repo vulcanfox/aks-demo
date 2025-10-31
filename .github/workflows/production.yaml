@@ -5,13 +5,13 @@ on:
     branches:
       - production
     paths:
-      - "environments/**"
+      - "environments/production/**"
       - "modules/**"
   pull_request:
     branches:
       - production
     paths:
-      - "environments/**"
+      - "environments/production/**"
       - "modules/**"
 permissions:
   contents: read

@@ -5,13 +5,13 @@ on:
     branches:
       - staging
     paths:
-      - "environments/**"
+      - "environments/staging/**"
       - "modules/**"
   pull_request:
     branches:
       - staging
     paths:
-      - "environments/**"
+      - "environments/staging/**"
       - "modules/**"
 permissions:
   contents: read
