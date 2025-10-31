@@ -192,13 +192,13 @@ jobs:
           TF_VAR_generic_name: ${{secrets.AKS_NAME}}
       - name: Show created resource group
         run: |
-          echo ${{ secrets.AZURE_RG }} 
-          az group show --name ${{ secrets.AZURE_RG }} --output table
+          echo  ${{secrets.AKS_NAME}}-rg
+          az group show --name  ${{secrets.AKS_NAME}}-rg --output table
 
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
-          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }}  --name ${{ secrets.AKS_NAME }} --overwrite-existing
+          az aks get-credentials --resource-group ${{secrets.AKS_NAME}}-rg --name ${{ secrets.AKS_NAME }} --overwrite-existing
       - name: Get MLflow external IP
         id: mlflow_ip
         run: echo "MLFLOW_EXTERNAL_IP=$(kubectl get svc mlflow -n ${{ secrets.AKS_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
