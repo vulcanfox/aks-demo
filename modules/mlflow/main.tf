@@ -16,7 +16,7 @@ resource "helm_release" "mlflow" {
 
       extraEnvVars = {
         # Allow the browser to call MLflow API
-        MLFLOW_SERVER_CORS_ALLOWED_ORIGINS = "*" # for testing; prefer explicit origins
+        MLFLOW_SERVER_CORS_ALLOWED_ORIGINS = "*" # for testing; prefer explicit origins...
 
         # Allow the Host header(s) you access MLflow with
         # Example: set to "mlflow.example.com,10.0.0.*,localhost:*"
