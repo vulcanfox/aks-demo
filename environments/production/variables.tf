@@ -1,7 +1,6 @@
 variable "generic_name" {
   description = "Name to use for resources."
   type        = string
-  default     = "adnan-demo"
 }
 
 variable "appId" {
