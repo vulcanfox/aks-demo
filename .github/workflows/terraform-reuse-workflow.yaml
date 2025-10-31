@@ -98,6 +98,8 @@ jobs:
         env:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
+          TF_VAR_generic_name: ${{secrets.AKS_NAME}}
       # Upload to blob storage
       - name: Upload tfplan to Azure Blob
         run: |
