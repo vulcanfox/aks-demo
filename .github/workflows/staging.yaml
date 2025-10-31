@@ -3,11 +3,13 @@ name: Terraform multi-environment workflow
 on:
   push:
     branches:
-      - production
+      - staging
     paths:
       - "environments/**"
       - "modules/**"
   pull_request:
+    branches:
+      - staging
     paths:
       - "environments/**"
       - "modules/**"
@@ -16,22 +18,19 @@ permissions:
   pull-requests: write
   id-token: write
 jobs:
-  matrix-terraform:
-    strategy:
-      matrix:
-        environment:
-          - name: production
-            directory: environments/production
-      max-parallel: 1
+  terraform:
     uses: ./.github/workflows/terraform-reuse-workflow.yaml
     with:
-      environment: ${{ matrix.environment.name }}
-      working-directory: ${{ matrix.environment.directory }}
-      terraform-version: 1.7.0
+      environment: staging
+      working-directory: environments/staging
+      plan-label: "latest" # Will be 'latest' on push
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_RG: ${{secrets.AZURE_RG}}
-      AKS_NAME: ${{secrets.AKS_NAME}}
+      AZURE_RG: ${{ secrets.AZURE_RG }}
+      AKS_NAME: ${{ secrets.AKS_NAME }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      AKS_NAMESPACE: ${{ secrets.AKS_NAMESPACE }}

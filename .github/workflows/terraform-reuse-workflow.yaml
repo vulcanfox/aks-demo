@@ -12,6 +12,9 @@ on:
         required: false
         type: string
         default: "1.7.0"
+      plan-label:
+        required: true
+        type: "string"
     secrets:
       AZURE_CLIENT_ID:
         required: true
@@ -25,8 +28,16 @@ on:
         required: true
       AKS_NAME:
         required: true
+      AKS_NAMESPACE:
+        required: true
+      AZURE_STORAGE_ACCOUNT:
+        required: true
+      AZURE_STORAGE_KEY:
+        required: true
 jobs:
   Terraform-plan:
+    # Only run on PR request
+    if: github.event_name == 'pull_request'
     # Set the environment
     environment: ${{ inputs.environment }}
     # Add permissions to connect to az
@@ -87,14 +98,19 @@ jobs:
         env:
           TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
-
-      # Upload the plan for the later apply job
-      - name: Upload Plan Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ github.workspace }}/${{ inputs.working-directory }}/tfplan.binary
-          retention-days: 1
+      # Upload to blob storage
+      - name: Upload tfplan to Azure Blob
+        run: |
+          az storage blob upload \
+            --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
+            --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+            --container-name terraform-plans \
+            --name tfplan-${{ inputs.plan-label }}.binary \
+            --file tfplan.binary \
+            --overwrite true
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
       - name: Comment Terraform plan (Python fetcher)
         run: python3 -v ${{ github.workspace }}/.github/scripts/plan-pr-comment-fetch.py
         env:
@@ -105,7 +121,6 @@ jobs:
 
   # Apply job starts here
   Terraform-apply:
-    needs: Terraform-plan
     if: github.ref == format('refs/heads/{0}', inputs.environment) && github.event_name == 'push'
     # Set the environment
     environment: ${{ inputs.environment }}
@@ -143,19 +158,43 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      - name: Verify blob uploaded
+        run: |
+          az storage blob list \
+            --account-name  ${{secrets.AZURE_STORAGE_ACCOUNT}} \
+            --account-key  ${{secrets.AZURE_STORAGE_KEY}} \
+            --container-name terraform-plans \
+            --output table
+
       # Step 5: Download the saved plan from the plan job previously
-      - name: Download Plan Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ github.workspace }}/${{ inputs.working-directory }}
+      - name: Download tfplan from Azure Blob
+        run: |
+          az storage blob download \
+            --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
+            --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+            --container-name terraform-plans \
+            --name tfplan-${{ inputs.plan-label }}.binary \
+            --file tfplan.binary
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+
       # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply tfplan.binary
+        env:
+          TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
+      - name: Show created resource group
+        run: |
+          echo ${{ secrets.AZURE_RG }} 
+          az group show --name ${{ secrets.AZURE_RG }} --output table
+
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
-          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }} --name ${{ secrets.AKS_NAME }} --overwrite-existing
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }}  --name ${{ secrets.AKS_NAME }} --overwrite-existing
       - name: Get MLflow external IP
         id: mlflow_ip
         run: echo "MLFLOW_EXTERNAL_IP=$(kubectl get svc mlflow -n ${{ secrets.AKS_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
