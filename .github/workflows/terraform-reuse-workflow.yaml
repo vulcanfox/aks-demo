@@ -105,6 +105,7 @@ jobs:
             --container-name terraform-plans \
             --name tfplan-${{ inputs.plan-label }}.binary \
             --file tfplan.binary
+            --overwrite true
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
