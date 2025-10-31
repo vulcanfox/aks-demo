@@ -101,6 +101,7 @@ jobs:
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
           TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
           TF_VAR_generic_name: ${{secrets.AKS_NAME}}
+          TF_VAR_subscription: ${{secrets.AZURE_SUBSCRIPTION_ID}}
       # Upload to blob storage
       - name: Upload tfplan to Azure Blob
         run: |
@@ -190,6 +191,7 @@ jobs:
           TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
           TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
           TF_VAR_generic_name: ${{secrets.AKS_NAME}}
+          TF_VAR_subscription: ${{secrets.AZURE_SUBSCRIPTION_ID}}
       - name: Show created resource group
         run: |
           echo  ${{secrets.AKS_NAME}}-rg
