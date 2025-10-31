@@ -198,7 +198,7 @@ jobs:
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
-          az aks get-credentials --resource-group ${{secrets.AKS_NAME}}-rg --name ${{ secrets.AKS_NAME }} --overwrite-existing
+          az aks get-credentials --resource-group ${{secrets.AKS_NAME}}-rg --name ${{ secrets.AKS_NAME }}-cluster --overwrite-existing
       - name: Get MLflow external IP
         id: mlflow_ip
         run: echo "MLFLOW_EXTERNAL_IP=$(kubectl get svc mlflow -n ${{ secrets.AKS_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
