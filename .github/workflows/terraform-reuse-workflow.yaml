@@ -56,6 +56,8 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Environment confirm
+        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
       - name: Debug list files
         run: |
           pwd
