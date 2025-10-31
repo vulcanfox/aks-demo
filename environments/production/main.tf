@@ -44,7 +44,7 @@ module "cluster" {
   source       = "../../modules/cluster"
   appId        = var.appId        # Pass root var to module
   password     = var.password     # Pass root var to module
-  generic_name = var.generic_name # Generic name
+  generic_name = var.generic_name # Generic name..
   environment  = var.environment
 }
 
