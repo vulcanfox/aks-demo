@@ -1,4 +1,4 @@
-name: Terraform multi-environment workflow
+name: Terraform production workflow
 
 on:
   push:
