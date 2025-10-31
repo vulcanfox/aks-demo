@@ -53,8 +53,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Environment confirm
-        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
@@ -62,7 +60,8 @@ jobs:
         run: |
           pwd
           ls -l ${{ github.workspace }}/${{ inputs.working-directory }}
-
+      - name: Environment confirm
+        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
       # Step 2: Log in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
