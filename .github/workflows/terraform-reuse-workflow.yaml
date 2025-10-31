@@ -53,6 +53,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Environment confirm
+        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
