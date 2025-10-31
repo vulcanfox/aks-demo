@@ -179,6 +179,9 @@ jobs:
       # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply
+        env:
+          TF_VAR_appId: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_password: ${{ secrets.AZURE_CLIENT_SECRET }}
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
