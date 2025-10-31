@@ -22,3 +22,8 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+variable "subscription" {
+  type      = string
+  sensitive = true
+}
