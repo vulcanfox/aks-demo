@@ -23,6 +23,7 @@ jobs:
     with:
       environment: staging
       working-directory: environments/staging
+      plan-label: "latest" # Will be 'latest' on push
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
