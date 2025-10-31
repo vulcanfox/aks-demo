@@ -100,7 +100,7 @@ jobs:
             --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
             --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
             --container-name terraform-plans \
-            --name tfplan-${{ github.sha }}.binary \
+            --name tfplan-${{ github.event.pull_request.head.sha }}.binary \
             --file tfplan.binary
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
@@ -167,7 +167,7 @@ jobs:
             --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
             --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
             --container-name terraform-plans \
-            --name tfplan-${{ github.sha }}.binary \
+            --name tfplan-${{ github.event.pull_request.head.sha }}.binary \
             --file tfplan.binary
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
