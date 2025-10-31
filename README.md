@@ -1,0 +1,1 @@
+[![Terraform production workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml) [![Terraform staging workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml)
