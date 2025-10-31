@@ -1,5 +1,5 @@
 variable "generic_name" {
-  description = "Name to use for resources."
+  description = "Name to use for resources and rg"
   type        = string
 }
 
@@ -16,7 +16,6 @@ variable "password" {
 variable "namespace" {
   description = "Name to use for namespace."
   type        = string
-  default     = "adnan-demo-namespace"
 }
 variable "environment" {
   description = "Name to use for the environment.."
