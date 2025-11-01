@@ -58,7 +58,7 @@ jobs:
         id: friday_check
         continue-on-error: true
         run: |
-          if [ "$(date +%u)" = "5" ]; then
+          if [ "$(date +%u)" = "4" ]; then
             echo "🚫 It's Friday!"
             exit 1
           fi
