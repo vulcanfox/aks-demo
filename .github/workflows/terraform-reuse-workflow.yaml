@@ -53,12 +53,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Debug list files
+        run: |
+          pwd
+          ls -l ${{ github.workspace }}/${{ inputs.working-directory }}
+      - name: Environment confirm
+        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
+      ######################################################################
       # Our organisation doesnt allow deploys on fridays.
       - name: Check Friday
         id: friday_check
         continue-on-error: true
         run: |
-          if [ "$(date +%u)" = "4" ]; then
+          if [ "$(date +%u)" = "5" ]; then
             echo "🚫 It's Friday!"
             exit 1
           fi
@@ -74,16 +84,7 @@ jobs:
       - name: Are you trying to make changes on a Friday?
         if: steps.friday_check.outcome == 'failure'
         run: exit 1
-
-      # Step 1: Checkout repository
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Debug list files
-        run: |
-          pwd
-          ls -l ${{ github.workspace }}/${{ inputs.working-directory }}
-      - name: Environment confirm
-        run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
+      #####################################################################
       # Step 2: Log in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
