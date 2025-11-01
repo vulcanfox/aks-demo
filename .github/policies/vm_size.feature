@@ -5,5 +5,5 @@ Feature: Restrict VM sizes
     Given I have azurerm_kubernetes_cluster defined
     When it has default_node_pool
     Then it must contain vm_size
-    And its value must be in ["Standard_B2s","Standard_D2s_v3"]
+    And its value must match the "^(Standard_B2s|Standard_D2s_v3)$" regex
 
