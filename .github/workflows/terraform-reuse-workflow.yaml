@@ -110,7 +110,14 @@ jobs:
       # Step 7: Run compliance check
       - name: Run organisational complaince check
         run: terraform-compliance -p tfplan.binary -f ${{ github.workspace }}/.github/policies/
-
+      # Comment for PR to give feedback to usera
+      - name: PR comment for Compliance check result
+        if: github.event_name== 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: "Compliance policies check passed ✅"
       # Step 8: Upload to blob storage
       - name: Upload tfplan to Azure Blob
         run: |
