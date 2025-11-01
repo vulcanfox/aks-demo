@@ -102,7 +102,16 @@ jobs:
           TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
           TF_VAR_generic_name: ${{secrets.AKS_NAME}}
           TF_VAR_subscription: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-      # Upload to blob storage
+
+      # Step 6: Install terraform compliance
+      - name: Install terraform compliance for compliance check
+        run: pip install terraform-compliance
+
+      # Step 7: Run compliance check
+      - name: Run organisational complaince check
+        run: terraform-compliance -p tfplan.binary -f ${{ github.workspace }}/.github/policies/
+
+      # Step 8: Upload to blob storage
       - name: Upload tfplan to Azure Blob
         run: |
           az storage blob upload \
