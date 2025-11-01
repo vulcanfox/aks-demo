@@ -1,7 +1,9 @@
 Feature: Restrict VM sizes
   Only certain VM sizes should be used!
 
-  Scenario: Ensure generic Azure VMs use allowed sizes
-    Given I have azurerm_virtual_machine defined
-    Then it must contain size
-    And its value must be in ["Standard_B2s", "Standard_D2s_v3"]
+  Scenario: AKS default node pool must use allowed VM sizes
+    Given I have azurerm_kubernetes_cluster defined
+    When it has default_node_pool
+    Then it must contain vm_size
+    And its value must match the "^(Standard_B2s|Standard_D2s_v3)$" regex
+
