@@ -79,9 +79,17 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: "🚫 It's Friday! No Terraform runs allowed."
+          body: " 📅  It's Friday! No deploys allowed 🚫. Nobody wants the potential pain!"
 
-      - name: Are you trying to make changes on a Friday?
+      - name: PR comment for friday check
+        if: github.event_name == 'pull_request' && steps.friday_check.outcome != 'failure'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: "Today is not a Friday, so you can deploy! ✅"
+
+      - name: Fail if Friday
         if: steps.friday_check.outcome == 'failure'
         run: exit 1
       #####################################################################
