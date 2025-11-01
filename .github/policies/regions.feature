@@ -5,4 +5,4 @@ Feature: Restrict allowed Azure regions
   Scenario: AKS clusters must be deployed in allowed regions only
   Given I have azurerm_kubernetes_cluster defined
   Then it must contain location
-  And its value must match the "(uksouth|ukwest)" regex
+  And its value must match the "(East US|UK South|UK West)" regex
