@@ -53,6 +53,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Our organisation doesnt allow deploys on fridays.
+      - name: Check Friday
+        id: friday_check
+        continue-on-error: true
+        run: |
+          if [ "$(date +%u)" = "5" ]; then
+            echo "🚫 It's Friday!"
+            exit 1
+          fi
+
+      - name: PR comment for friday check
+        if: github.event_name == 'pull_request' && steps.friday_check.outcome == 'failure'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: "🚫 It's Friday! No Terraform runs allowed."
+
+      - name: Are you trying to make changes on a Friday?
+        if: steps.friday_check.outcome == 'failure'
+        run: exit 1
+
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
