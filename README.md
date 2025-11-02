@@ -73,6 +73,34 @@ Modules consist of main.tf, varaibles.tf, outputs.tf:
         31.	
         32.	}
         ```
+        The main.tf for our mlflow module looks like below and specifies the settings for our mlflow service that we want to install in the kubernetes cluster:
+        ```python 
+        resource "helm_release" "mlflow" {
+        name             = "mlflow"
+        repository       = "https://community-charts.github.io/helm-charts"
+        chart            = "mlflow"
+        namespace        = var.namespace
+        create_namespace = true
+        version          = "1.7.3"
+        timeout          = 900
+        wait             = true
+
+        values = [
+          yamlencode({
+            replicaCount = 3 # How many pods (copies of our containerised app) for redundancy/load balancing
+            service = {
+              type = "LoadBalancer"
+            }
+
+            extraEnvVars = {
+              # just for testing, never for prod
+              MLFLOW_SERVER_CORS_ALLOWED_ORIGINS = "*"
+              # just for testing, never for prod
+              MLFLOW_SERVER_ALLOWED_HOSTS = "*"
+            }
+          })
+        ]
+      }```
 2. `Variables.tf` describes the variables available to our module. For example, var.appId, and var.password as seen in the main.tf  These are then provided directly from our GitHub Actions workflow when it triggers the build.
 
 ### Environment files
