@@ -364,4 +364,4 @@ It’s important to note that we could have easily changed this to use autoscali
   os_disk_size_gb     = 50
 }
 ```
-Once we commit the changes and raise a PR in our environment, the workflow will trigger and create a plan, and if approved, the cluster node size will be increased for our users of that particular environment without any downtime.
+Once we commit the changes and raise a PR in our environment, the workflow will trigger and create a plan, and if approved, the cluster node size and replica count will be increased for our users of that particular environment without any downtime.
