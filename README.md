@@ -241,6 +241,7 @@ And then we can go to the displayed address using our browser and find our mlflo
 
 ![](screenshots/10-server-running.png)
 
+### Scaling 
 Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied. For example, suppose we increased the number of nodes for our Kubernetes cluster by changing it from 2 to 3:
 
 ```python
