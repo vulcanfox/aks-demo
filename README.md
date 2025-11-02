@@ -46,20 +46,28 @@ This demonstration uses Terraform, which allows us to define, test, and manage o
 
 ![](screenshots/2-config-structure.png)
 
-Here, we can see there are two modules (cluster and mlflow) and environments such as production, staging, and dev.  The separate environments enable us to provision our cluster for different purposes. For example, we’d have: 
+> [!IMPORTANT]
+> In a real scenario you'd want to have dev, staging, production environments. But for purpose of this demonstration, we only use two environments.
+>
+
+
+Here, we can see there are two modules (cluster and mlflow) and environments such as production, and staging. The separate environments enable us to provision our cluster for different purposes. For example, we’d have: 
+
 1.	One environment for engineers to access so they can make changes to the infrastructure (Dev) as needed, 
-2.	Another staging environment to hand-on-test that infrastructure by non-engineers (perhaps a selected group of data scientists)
+2.	A staging environment to hand-on-test that infrastructure by non-engineers (perhaps a selected group of data scientists).
 3.	A final environment for production, which represents the version of the platform that all users use daily.
 
-Our GitHub Actions workflow structure can intelligently switch between environments depending on the branch that is proposing the changes. For example, if the changes are proposed by a branch into the dev environment, then the workflow will point the changes to the correct environment, and so on.
 
-Now we have some understand of how the overall configuration is structured in terraform, but what do these individual parts look like? Let’s have a look:
+
+Our GitHub Actions workflow structure can intelligently switch between environments depending on the branch that is proposing the changes. For example, if the changes are proposed by a branch into the staging environment, then the workflow will point the changes to the staging environment, and so on.
+
+Now we have some understand of how the overall configuration is arranged, but what do these individual parts look like? Let’s have a look:
 
 ### Module files
 ![](screenshots/3-module-files.png)
 
 Modules consist of `main.tf, variables.tf, outputs.tf`:
-1.	 `Main.tf `: Describes the resource(s) that the model represents. For example, the code below describes our Kubernetes cluster on Azure. Its location is in the East US; it has a node count (virtual machines) of 2, it runs the Kubernetes version we set (1.32.7), and so on.
+1.	 `Main.tf `: Describes the resource(s) that the model represents. For example, the code below describes our Kubernetes cluster on Azure. Its location is in the East US, it has a node count (virtual machines) of 2, it runs the Kubernetes version we set (1.32.7), and so on.
 
         ```python
         2.	resource "azurerm_resource_group" "default" {
@@ -94,7 +102,7 @@ Modules consist of `main.tf, variables.tf, outputs.tf`:
         31.	
         32.	}
         ```
-        The main.tf for our mlflow module looks like below and specifies the settings for our mlflow service that we want to install in the kubernetes cluster:
+        The `main.tf` for our mlflow module looks like below and specifies the settings for our mlflow service that we want to install in the kubernetes cluster:
         ```python 
         resource "helm_release" "mlflow" {
         name             = "mlflow"
@@ -122,11 +130,11 @@ Modules consist of `main.tf, variables.tf, outputs.tf`:
           })
         ]
       }```
-2. `Variables.tf` describes the variables available to our module. For example, var.appId, and var.password as seen in the main.tf  These are then provided directly from our GitHub Actions workflow when it triggers the build.
-3. `outputs.tf` describe the outputs of our configuration components. For example, the kubernets host name once its provisioned.
+2. `Variables.tf` describes the variables available to our module. For example, var.appId, and var.password as seen in the `main.tf` file.  These can be provided directly from our GitHub Actions workflow when it triggers the build.
+3. `outputs.tf` describe the outputs of our configuration components. For example, the kubernets host name once it is provisioned.
 
 ### Environment files
-Each environment also has a `main.tf`, and `variables.tf`. These represent the configuration our cluster (and other modules) will be provisioned through. For example, here’s the `main.tf` for one of those environments:
+Each environment also has a `main.tf`, and `variables.tf`. These represent the tools our cluster (and modules) will be provisioned through. For example, here’s the `main.tf` for one of those environments:
 
 ```python
 terraform {
@@ -219,7 +227,7 @@ We can define policies using tools like terraform-compliance, which each configu
 We store our policies in a policies folder at the .github level in the repository, which the workflow can then use for reference when running terraform-compliance. 
 
 ### Environment-based workflow triggers
-As shown in the image above, we have workflow files for different environments (production.yaml, staging.yaml, etc.). These particular workflow files don’t actually carry out the steps (like validate, plan, apply, etc.). Instead, all they actually do is set the environment for our reusable workflow to run. This way, we have one workflow that is common between environments, and specs for our environments that can be different. 
+As shown in the image above, we have workflow files for different environments (production.yaml, staging.yaml, etc.). These particular workflow files don’t actually carry out the steps (like validate, plan, apply, etc.). Instead, all they actually do is set the environment for our reusable workflow to run. This way, we have one workflow that is common between environments, and the individual specs for our environments that can be different. 
 
 For example, we can see in the below code that the staging workflow triggers on pushes and pull requests on the staging branch and that it only looks at file changes in the staging environment and modules:
 
@@ -281,7 +289,7 @@ If all steps are completed successfully (no validation fail, policy check fail e
 The reviewer can then merge the PR on approval. This will then trigger the apply job separately, which does the following:
 1.	Create a runner
 2.	Install Terraform
-3.	Initialise
+3.	Initialise Terraform
 4.	Download the stored plan.
 5.	Apply the plan (which creates/updates the configuration).
 6.	Fetch and show the IP address of the newly updated service: 
