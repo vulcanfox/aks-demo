@@ -224,6 +224,8 @@ If all steps are completed successfully (no validation fail, policy check fail e
 
 ![](screenshots/7-plan-for-approval.png)
 
+![](screenshots/9-merge-to-approve.png)
+
 
 The reviewer can then merge the PR on approval. This will then trigger the apply job separately, which does the following:
 1.	Create a runner
@@ -234,6 +236,10 @@ The reviewer can then merge the PR on approval. This will then trigger the apply
 6.	Fetch and show the IP address of the newly updated service: 
 
 ![](screenshots/8-plan-applied.png)
+
+And then we can go to the displayed address using our browser and find our mlflow service all up and running:
+
+![](screenshots/10-server-running.png)
 
 Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied. For example, suppose we increased the number of nodes for our Kubernetes cluster by changing it from 2 to 3:
 
