@@ -1,7 +1,8 @@
 # Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform
 ![Author](https://img.shields.io/badge/Author-Adnan%20Abdulle-blue)
 
-[![Terraform production workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml) [![Terraform staging workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml)
+[![Terraform production workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml)
+ [![Terraform staging workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml)
 
 - [Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform](#operationalise-infrastructure-for-enterprise-grade-machine-learning-using-kubernetes-and-terraform)
   - [What are Kubernetes and Terraform?](#what-are-kubernetes-and-terraform)
