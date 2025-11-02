@@ -63,7 +63,7 @@ jobs:
       - name: Environment confirm
         run: echo ${{ inputs.working-directory }}  ${{ inputs.environment }}
       ######################################################################
-      # Our organisation doesnt allow deploys on fridays.
+      # Our organisation doesnt allow deploys on Fridays!
       - name: Check Friday
         id: friday_check
         continue-on-error: true
@@ -72,7 +72,6 @@ jobs:
             echo "🚫 It's Friday!"
             exit 1
           fi
-
       - name: PR comment for friday check
         if: github.event_name == 'pull_request' && steps.friday_check.outcome == 'failure'
         uses: peter-evans/create-or-update-comment@v4
@@ -88,23 +87,22 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Today is not a Friday, so you can deploy! ✅"
-
       - name: Fail if Friday
         if: steps.friday_check.outcome == 'failure'
         run: exit 1
-      #####################################################################
-      # Step 2: Log in with your Azure credentials
+      ######################################################################
+      # Step 2: Log in to Azure
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
+      ######################################################################
       # Step 3: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
+      ######################################################################
       # Step 4: Terraform init to build providers/modules
       - name: Terraform Init
         run: terraform init -reconfigure # new state
@@ -121,6 +119,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Terraform successfully initialised ✅"
+        ######################################################################
       # Step 5: Trigger Terraform Validate + Plan
       - name: Terraform Validate
         run: terraform validate
@@ -136,11 +135,11 @@ jobs:
           TF_VAR_namespace: ${{secrets.AKS_NAMESPACE}}
           TF_VAR_generic_name: ${{secrets.AKS_NAME}}
           TF_VAR_subscription: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-
+        ######################################################################
       # Step 6: Install terraform compliance
       - name: Install terraform compliance for compliance check
         run: pip install terraform-compliance
-
+        ######################################################################
       # Step 7: Run compliance check
       - name: Run organisational complaince check
         run: terraform-compliance -p tfplan.binary -f ${{ github.workspace }}/.github/policies/
@@ -152,7 +151,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: "Compliance policies check passed ✅"
-      # Step 8: Upload to blob storage
+        ######################################################################
+        # Step 8: Upload to blob storage
       - name: Upload tfplan to Azure Blob
         run: |
           az storage blob upload \
@@ -193,7 +193,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Log in with your Azure credentials
+      # Step 2: Log in with Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
         with:

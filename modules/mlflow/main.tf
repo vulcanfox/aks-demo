@@ -10,6 +10,7 @@ resource "helm_release" "mlflow" {
 
   values = [
     yamlencode({
+      replicaCount = 3
       service = {
         type = "LoadBalancer"
       }
