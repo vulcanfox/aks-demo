@@ -1,8 +1,9 @@
-# Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform ![Author](https://img.shields.io/badge/Author-Adnan%20Abdulle-blue)
+# Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform ![Author](https://img.shields.io/badge/Author-Adnan%20Abdulle-blue) [![Terraform production workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml)
+ [![Terraform staging workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml)
 
 
 
-- [Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform ](#operationalise-infrastructure-for-enterprise-grade-machine-learning-using-kubernetes-and-terraform-)
+- [Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform  ](#operationalise-infrastructure-for-enterprise-grade-machine-learning-using-kubernetes-and-terraform--)
   - [What are Kubernetes and Terraform?](#what-are-kubernetes-and-terraform)
     - [Terraform](#terraform)
     - [Module files](#module-files)
@@ -15,9 +16,8 @@
     - [Zero-Downtime Scaling with Kubernetes and Terraform](#zero-downtime-scaling-with-kubernetes-and-terraform)
 
 
-[![Terraform production workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/production.yaml)
- [![Terraform staging workflow](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml/badge.svg)](https://github.com/vulcanfox/aks-demo/actions/workflows/staging.yaml)
- 
+
+
 Here, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
 This infrastructure will use infrastructure-as-code, automation, policy-as-code, and the cloud to achieve this.
 The infrastructure will consist of the following:
