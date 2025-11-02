@@ -290,7 +290,7 @@ After the apply job completes, the environment will be accessible from a separat
 ![](screenshots/12-production-env-ready.png)
 
 
-### Zero-Downtime Scaling with Kubernetes and Terraform
+### Zero-Downtime Scaling with Kubernetes and Terraform 
 Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied (depending on what we're changing). 
 For example, suppose we increased the number of pods (replicas) in our cluster to improve load balancing/redundancy:
 ```python
