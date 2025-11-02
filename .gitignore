@@ -1,1 +1,3 @@
 /environments/production/.terraform
+# macOS system files ignore
+.DS_Store
