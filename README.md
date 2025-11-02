@@ -7,7 +7,7 @@
     - [Terraform](#terraform)
     - [Module files](#module-files)
     - [Environment files](#environment-files)
-    - [The terraform way](#the-terraform-way)
+    - [The Terraform way](#the-terraform-way)
   - [Automation](#automation)
     - [Security and compliance](#security-and-compliance)
     - [Environment-based workflow triggers](#environment-based-workflow-triggers)
@@ -17,26 +17,29 @@
 
 
 
-In this guide, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
+In this guide, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform.  This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
 This infrastructure will use infrastructure-as-code, automation, policy-as-code, and the cloud to achieve this.
 The infrastructure will consist of the following:
 
 1. Kubernetes cluster running in the cloud (Azure) to host our platform.
 2. MLflow – an open-source platform to build and manage experiments and models (and serve them too).
-   Here are some of the tools used:
-3. Terraform to create and manage our entire infrastructure as code (infrastructure-as-code).
-4. GitHub Action workflows to trigger automated workflows when changes are made.
-5. Policy checking tools to check our infrastructure plans against organisational compliance (policy-as-code). For example, to make sure our infrastructure doesn’t break budget or other org-specific policies.
+  
+Here are some of the tools used:
+   - Terraform to create and manage our entire infrastructure as code (infrastructure-as-code).
+   - GitHub Action workflows to trigger automated workflows when changes are made.
+   - Policy checking tools to check our infrastructure plans against organisational compliance (policy-as-code). For example, to make sure our infrastructure doesn’t break budget or other org-specific policies.
+
+The code for all this is in the folders on this repo.
 
 ## What are Kubernetes and Terraform?
 
-Kubernetes enables us to run applications in containers that can easily be provisioned, scaled, and updated without downtime (changes can also be reversed without downtime). Crucial because we don’t want any disruptions to the important work carried out by our teams.
+Kubernetes enables us to run applications in containers that can easily be provisioned, scaled, and updated without downtime. This is critical, because we naturally don’t want any disruptions to the important work carried out by our teams.
 
 ![](screenshots/1-cluster-diagram.png)
 
 A Kubernetes cluster consists of multiple nodes, each running a containerised instance of our application/software we want to use. The cluster has a control node, which coordinates the cluster’s components, and worker nodes, which contain our application. We can increase the number (horizontal scale) of our nodes, make each of them more powerful in capacity (vertical scaling), or make updates to our containerised apps. All without downtime. This is because changes are applied using rolling updates; Kubernetes gradually replaces old pods with new ones, ensuring that some instances are always running to serve traffic while the update is in progress.
 
-This is an enterprise-scale scenario, so we’ll use a cloud service (Azure) to host and provision our Kubernetes cluster. Our Kubernetes cluster will run in the cloud. With cloud services, we get more robust and streamlined security, high availability, redundancy and integrations with other services.
+This is an enterprise-scale scenario, so we’ll use a cloud service (Azure) to host and provision our Kubernetes cluster. Our Kubernetes cluster will run in the cloud. With cloud services, we get more robust and streamlined security, high availability, redundancy and integrations with other services, and also cost savings.
 
 ### Terraform 
 This demonstration uses Terraform, which allows us to define, test, and manage our cloud infrastructure as configurable code. Terraform makes it easy to deploy our infrastructure to different cloud services and even makes it possible to deploy our Kubernetes cluster to multiple cloud services simultaneously for additional redundancy and peace of mind should one cloud service fail (this happens more than you think). 
@@ -45,16 +48,17 @@ This demonstration uses Terraform, which allows us to define, test, and manage o
 
 Here, we can see there are two modules (cluster and mlflow) and environments such as production, staging, and dev.  The separate environments enable us to provision our cluster for different purposes. For example, we’d have: 
 1.	One environment for engineers to access so they can make changes to the infrastructure (Dev) as needed, 
-2.	Another environment to hand-on-test that infrastructure by non-engineers (perhaps a selected group of data scientists)
+2.	Another staging environment to hand-on-test that infrastructure by non-engineers (perhaps a selected group of data scientists)
 3.	A final environment for production, which represents the version of the platform that all users use daily.
 
 Our GitHub Actions workflow structure can intelligently switch between environments depending on the branch that is proposing the changes. For example, if the changes are proposed by a branch into the dev environment, then the workflow will point the changes to the correct environment, and so on.
-I’ve shown how the overall configuration is structured in terraform, but what do these individual pieces look like? Let’s have a look:
+
+Now we have some understand of how the overall configuration is structured in terraform, but what do these individual parts look like? Let’s have a look:
 
 ### Module files
 ![](screenshots/3-module-files.png)
 
-Modules consist of main.tf, varaibles.tf, outputs.tf:
+Modules consist of `main.tf, variables.tf, outputs.tf`:
 1.	 `Main.tf `: Describes the resource(s) that the model represents. For example, the code below describes our Kubernetes cluster on Azure. Its location is in the East US; it has a node count (virtual machines) of 2, it runs the Kubernetes version we set (1.32.7), and so on.
 
         ```python
@@ -119,9 +123,10 @@ Modules consist of main.tf, varaibles.tf, outputs.tf:
         ]
       }```
 2. `Variables.tf` describes the variables available to our module. For example, var.appId, and var.password as seen in the main.tf  These are then provided directly from our GitHub Actions workflow when it triggers the build.
+3. `outputs.tf` describe the outputs of our configuration components. For example, the kubernets host name once its provisioned.
 
 ### Environment files
-Each environment also has a main.tf, and variables.tf. Except that those represent the configuration our cluster (and other modules) will be provisioned through. For example, here’s the main.tf for one of those environments:
+Each environment also has a `main.tf`, and `variables.tf`. These represent the configuration our cluster (and other modules) will be provisioned through. For example, here’s the `main.tf` for one of those environments:
 
 ```python
 terraform {
@@ -180,8 +185,8 @@ module "mlflow" {
 }
 ```
 
-### The terraform way
-With Terraform, we can build our entire infrastructure by opening a command-line tool and running:
+### The Terraform way
+With Terraform, we can build our entire infrastructure by opening a command-line terminal and running:
 
 ```bash
     terraform init
@@ -216,7 +221,7 @@ We store our policies in a policies folder at the .github level in the repositor
 ### Environment-based workflow triggers
 As shown in the image above, we have workflow files for different environments (production.yaml, staging.yaml, etc.). These particular workflow files don’t actually carry out the steps (like validate, plan, apply, etc.). Instead, all they actually do is set the environment for our reusable workflow to run. This way, we have one workflow that is common between environments, and specs for our environments that can be different. 
 
-For example, we can see in the below code that the staging workflow triggers on pushes and pull requests to the staging branch and that it only looks at file changes in the staging environment and modules:
+For example, we can see in the below code that the staging workflow triggers on pushes and pull requests on the staging branch and that it only looks at file changes in the staging environment and modules:
 
 ```yaml
 name: Terraform staging workflow
@@ -255,13 +260,14 @@ Our reusable workflow file contains the steps to run both the plan and apply job
 
 1.	We want all plans to be approved by a human being (after passing all checks).
 2.	We want plans only to be applied after a PR is merged into a target environment.
+
 The process works like this: suppose a change is being proposed to the staging branch. When the engineer raises a PR, our workflow will trigger our Terraform Plan job:
-1.	Create a runner
-2.	Install Terraform
-3.	Initialise + Validate
-4.	Create a plan based on our configuration
-5.	Run compliance checks against our plan.
-6.	Save our plan on an encrypted remote storage on Azure.
+  1.	Create a runner
+  2.	Install Terraform
+  3.	Initialise + Validate
+  4.	Create a plan based on our configuration
+  5.	Run compliance checks against our plan.
+  6.	Save our plan on an encrypted remote storage on Azure.
 
 ![](screenshots/6-plan-ready.png)
 
@@ -286,7 +292,7 @@ And then we can go to the displayed address using our browser and find our mlflo
 
 ![](screenshots/10-server-running.png)
 
-To make propagate our changes to the production environment, we can then simply raise a PR into production from the staging branch for review and approval. 
+To propagate our changes to the production environment, we can then simply raise a PR into production from the staging branch for review and approval. 
 
 ![](screenshots/11-pr-for-production.png)
 
