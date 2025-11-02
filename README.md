@@ -17,7 +17,7 @@
 
 
 
-Here, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
+In this guide, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
 This infrastructure will use infrastructure-as-code, automation, policy-as-code, and the cloud to achieve this.
 The infrastructure will consist of the following:
 
