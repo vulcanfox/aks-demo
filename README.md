@@ -269,7 +269,14 @@ And then we can go to the displayed address using our browser and find our mlflo
 
 ![](screenshots/10-server-running.png)
 
-To make propagate our changes to the production environment, we can then simply raise a PR into production from the staging branch for review and approval. The changes would then  be automatically applied for production.
+To make propagate our changes to the production environment, we can then simply raise a PR into production from the staging branch for review and approval. 
+
+![](screenshots/11-pr-for-production.png)
+
+The changes would then  be automatically applied for production.
+After the apply job completes, the environment will be accessible from a separate server:
+
+![](screenshots/12-production-env-ready.png)
 
 
 ### Scaling 
