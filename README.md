@@ -9,7 +9,7 @@
     - [Security and compliance](#security-and-compliance)
     - [Environment-based workflow triggers](#environment-based-workflow-triggers)
     - [Separately trigger plan and apply workflow jobs](#separately-trigger-plan-and-apply-workflow-jobs)
-    - [Scaling](#scaling)
+    - [Zero-Downtime Scaling with Kubernetes and Terraform](#zero-downtime-scaling-with-kubernetes-and-terraform)
 
 Here, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
 This infrastructure will use infrastructure-as-code, automation, policy-as-code, and the cloud to achieve this.
@@ -290,7 +290,7 @@ After the apply job completes, the environment will be accessible from a separat
 ![](screenshots/12-production-env-ready.png)
 
 
-### Scaling 
+### Zero-Downtime Scaling with Kubernetes and Terraform
 Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied (depending on what we're changing). 
 For example, suppose we increased the number of pods (replicas) in our cluster to improve load balancing/redundancy:
 ```python
