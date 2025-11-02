@@ -257,4 +257,4 @@ jobs:
         run: echo "MLFLOW_EXTERNAL_IP=$(kubectl get svc mlflow -n ${{ secrets.AKS_NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
 
       - name: Show MLflow server address
-        run: echo "MLflow deployment finished. cc @vulcanfox — http://${{ steps.mlflow_ip.outputs.MLFLOW_EXTERNAL_IP }}" >> $GITHUB_STEP_SUMMARY
+        run: echo "MLflow deployment finished for  ${{ inputs.environment }} environment. cc @vulcanfox — http://${{ steps.mlflow_ip.outputs.MLFLOW_EXTERNAL_IP }}" >> $GITHUB_STEP_SUMMARY
