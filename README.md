@@ -280,7 +280,37 @@ After the apply job completes, the environment will be accessible from a separat
 
 
 ### Scaling 
-Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied. For example, suppose we increased the number of nodes for our Kubernetes cluster by changing it from 2 to 3:
+Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied (depending on what we're changing). 
+For example, suppose we increased the number of pods (replicas) in our cluster to improve load balancing/redundancy:
+```python
+resource "helm_release" "mlflow" {
+  name             = "mlflow"
+  repository       = "https://community-charts.github.io/helm-charts"
+  chart            = "mlflow"
+  namespace        = var.namespace
+  create_namespace = true
+  version          = "1.7.3"
+  timeout          = 900
+  wait             = true
+
+  values = [
+    yamlencode({
+      replicaCount = 4 # used to be 3, changed to 4
+      service = {
+        type = "LoadBalancer"
+      }
+
+      extraEnvVars = {
+        # just for testing
+        MLFLOW_SERVER_CORS_ALLOWED_ORIGINS = "*"
+        # just for testing
+        MLFLOW_SERVER_ALLOWED_HOSTS = "*"
+      }
+    })
+  ]
+}
+```
+And suppose we also increased the number of nodes for our Kubernetes cluster by changing it from 2 to 3:
 
 ```python
 resource "azurerm_kubernetes_cluster" "default" {
@@ -309,6 +339,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 }
 ```
+These changes would be applied with zero downtime.
 
 It’s important to note that we could have easily changed this to use autoscaling instead by setting a min/max count for worker nodes:
 
@@ -317,10 +348,10 @@ It’s important to note that we could have easily changed this to use autoscali
   name                = "default"
   enable_auto_scaling = true
   min_count           = 2
-  max_count           = 8
+  max_count           = 5
   vm_size             = "Standard_D2s_v3"
   os_disk_size_gb     = 50
 }
 ```
-So we could potentially have up to 8 nodes running, and the scaling would be handled automatically by the cluster. 
+So we could potentially have up to 5 nodes running, and the scaling would be handled automatically by the cluster. 
 Once we commit the change and raise a PR in our staging environment, the workflow will trigger and create a plan, and if approved, the cluster node size will be increased for our users of that particular environment without any downtime.
