@@ -265,9 +265,12 @@ The reviewer can then merge the PR on approval. This will then trigger the apply
 
 ![](screenshots/8-plan-applied.png)
 
-And then we can go to the displayed address using our browser and find our mlflow service all up and running:
+And then we can go to the displayed address using our browser and find our mlflow service in our staging environment all up and running:
 
 ![](screenshots/10-server-running.png)
+
+To make propagate our changes to the production environment, we can then simply raise a PR into production from the staging branch for review and approval. The changes would then  be automatically applied for production.
+
 
 ### Scaling 
 Crucial to remember that, because this is Kubernetes, there is no downtime for the user as configuration changes are applied. For example, suppose we increased the number of nodes for our Kubernetes cluster by changing it from 2 to 3:
