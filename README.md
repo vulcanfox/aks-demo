@@ -1,4 +1,15 @@
 # Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform
+- [Operationalise infrastructure for enterprise-grade machine learning using Kubernetes and Terraform](#operationalise-infrastructure-for-enterprise-grade-machine-learning-using-kubernetes-and-terraform)
+  - [What are Kubernetes and Terraform?](#what-are-kubernetes-and-terraform)
+    - [Terraform](#terraform)
+    - [Module files](#module-files)
+    - [Environment files](#environment-files)
+    - [The terraform way](#the-terraform-way)
+  - [Automation](#automation)
+    - [Security and compliance](#security-and-compliance)
+    - [Environment-based workflow triggers](#environment-based-workflow-triggers)
+    - [Separately trigger plan and apply workflow jobs](#separately-trigger-plan-and-apply-workflow-jobs)
+    - [Scaling](#scaling)
 
 Here, I will show how to deploy and manage an infrastructure for an enterprise-grade machine learning platform. This sort of infrastructure is useful to a team of data scientists, machine learning engineers, researchers, etc., to collaborate on large projects.
 This infrastructure will use infrastructure-as-code, automation, policy-as-code, and the cloud to achieve this.
