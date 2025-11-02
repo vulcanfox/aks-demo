@@ -192,7 +192,7 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
-
+      ######################################################################
       # Step 2: Log in with Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
@@ -200,10 +200,11 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
+      ######################################################################
       # Step 3: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+      ######################################################################
       # Step 4: Terraform init to build providers/modules
       - name: Terraform Init
         run: terraform init
@@ -219,7 +220,7 @@ jobs:
             --account-key  ${{secrets.AZURE_STORAGE_KEY}} \
             --container-name terraform-plans \
             --output table
-
+      ######################################################################
       # Step 5: Download the saved plan from the plan job previously
       - name: Download tfplan from Azure Blob
         run: |
@@ -232,7 +233,7 @@ jobs:
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-
+      ######################################################################
       # Step 6: Apply the plan.
       - name: Terraform Apply
         run: terraform apply tfplan.binary
@@ -246,7 +247,7 @@ jobs:
         run: |
           echo  ${{secrets.AKS_NAME}}-rg
           az group show --name  ${{secrets.AKS_NAME}}-rg --output table
-
+      ######################################################################
       # Step 7: Get the server IP that is now running on AKS
       - name: Get AKS credentials
         run: |
