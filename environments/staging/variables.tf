@@ -24,3 +24,7 @@ variable "environment" {
   type        = string
   default     = "staging"
 }
+variable "subscription" {
+  type      = string
+  sensitive = true
+}
