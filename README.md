@@ -67,7 +67,7 @@ Now we have some understand of how the overall configuration is arranged, but wh
 ![](screenshots/3-module-files.png)
 
 Modules consist of `main.tf, variables.tf, outputs.tf`:
-1.	 `Main.tf `: Describes the resource(s) that the model represents. For example, the code below describes our Kubernetes cluster on Azure. Its location is in the East US, it has a node count (virtual machines) of 2, it runs the Kubernetes version we set (1.32.7), and so on.
+1.	 `Main.tf `: Describes the resource(s) that the module represents. For example, the code below describes our Kubernetes cluster on Azure. Its location is in the East US, it has a node count (virtual machines) of 2, it runs the Kubernetes version we set (1.32.7), and so on.
 
         ```python
         2.	resource "azurerm_resource_group" "default" {
@@ -371,17 +371,17 @@ resource "azurerm_kubernetes_cluster" "default" {
 }
 ```
 
+> [!IMPORTANT]
+>It’s important to note that we could have easily changed this to use autoscaling instead by setting a min/max count for worker nodes:
+> ```python
+>  default_node_pool {
+>  name                = "default"
+>  enable_auto_scaling = true
+>  min_count           = 2
+>  max_count           = 5
+>  vm_size             = "Standard_D2s_v3"
+>  os_disk_size_gb     = 50
+>}
+>```
 
-It’s important to note that we could have easily changed this to use autoscaling instead by setting a min/max count for worker nodes:
-
-```python
-  default_node_pool {
-  name                = "default"
-  enable_auto_scaling = true
-  min_count           = 2
-  max_count           = 5
-  vm_size             = "Standard_D2s_v3"
-  os_disk_size_gb     = 50
-}
-```
 Once we commit the changes and raise a PR in our environment, the workflow will trigger and create a plan, and if approved, the cluster node size and replica count will be increased for our users of that particular environment without any downtime.
